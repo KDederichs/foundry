@@ -3,16 +3,22 @@
 namespace Zenstruck\Foundry\Tests\Fixture\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 class BigIntEntity
 {
     #[ORM\Id]
-    #[ORM\Column]
-    private ?int $id = 1;
+    #[ORM\Column(type: 'uuid')]
+    private Uuid $id;
 
     #[ORM\Column(type: 'bigint', nullable: false, options: ['default' => "0"])]
     private ?string $bigIntVal = '0';
+
+    public function __construct()
+    {
+        $this->id = Uuid::v7();
+    }
 
     public function getBigIntVal(): ?string
     {
@@ -25,14 +31,8 @@ class BigIntEntity
         return $this;
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
-    }
-
-    public function setId(?int $id): BigIntEntity
-    {
-        $this->id = $id;
-        return $this;
     }
 }
