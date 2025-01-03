@@ -44,18 +44,16 @@ final class LazyValueTest extends TestCase
      */
     public function can_handle_array_with_lazy_values(): void
     {
-        $value = LazyValue::new(function() {
-            return [
-                5,
-                LazyValue::new(fn() => 'foo'),
-                6,
-                'foo' => [
-                    'bar' => 7,
-                    'baz' => LazyValue::new(fn() => 'foo'),
-                ],
-                [8, LazyValue::new(fn() => 'foo')],
-            ];
-        });
+        $value = LazyValue::new(fn() => [
+            5,
+            LazyValue::new(fn() => 'foo'),
+            6,
+            'foo' => [
+                'bar' => 7,
+                'baz' => LazyValue::new(fn() => 'foo'),
+            ],
+            [8, LazyValue::new(fn() => 'foo')],
+        ]);
 
         $this->assertSame([5, 'foo', 6, 'foo' => ['bar' => 7, 'baz' => 'foo'], [8, 'foo']], $value());
     }

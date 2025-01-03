@@ -22,7 +22,6 @@ use Zenstruck\Foundry\Persistence\RepositoryDecorator;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Tests\Fixtures\Entity\Category;
 use Zenstruck\Foundry\Tests\Fixtures\Entity\Post;
-
 use Zenstruck\Foundry\Tests\Fixtures\Factories\PostFactory;
 
 use function Zenstruck\Foundry\create;

@@ -47,7 +47,7 @@ final class ProxyTest extends TestCase
      */
     public function can_access_wrapped_objects_properties(): void
     {
-        $proxy = new ProxyObject(new class() {
+        $proxy = new ProxyObject(new class {
             public $property;
         });
 
