@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [v1.38.4](https://github.com/zenstruck/foundry/releases/tag/v1.38.4)
+
+January 3rd, 2025 - [v1.38.3...v1.38.4](https://github.com/zenstruck/foundry/compare/v1.38.3...v1.38.4)
+
+* dcf09e8 minor: add unproxy function (#776) by @nikophil
+* 8037756 doc: fix docblock typo (#670) by @kbond
+
 ## [v1.38.3](https://github.com/zenstruck/foundry/releases/tag/v1.38.3)
 
 July 4th, 2024 - [v1.38.2...v1.38.3](https://github.com/zenstruck/foundry/compare/v1.38.2...v1.38.3)
