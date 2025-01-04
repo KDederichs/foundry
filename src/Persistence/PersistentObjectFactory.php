@@ -20,7 +20,6 @@ use Zenstruck\Foundry\Factory;
 use Zenstruck\Foundry\FactoryCollection;
 use Zenstruck\Foundry\ObjectFactory;
 use Zenstruck\Foundry\Persistence\Exception\NotEnoughObjects;
-
 use Zenstruck\Foundry\Persistence\Exception\RefreshObjectFailed;
 
 use function Zenstruck\Foundry\set;
