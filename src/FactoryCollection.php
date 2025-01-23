@@ -152,8 +152,8 @@ final class FactoryCollection implements \IteratorAggregate
             $factories[] = $this->factory->with($attributesOrFactory)->with(['__index' => $i++]);
         }
 
-        return array_map( // @phpstan-ignore return.type (PHPStan does not understand we have an array of factories)
-            function (Factory $f) {
+        return \array_map( // @phpstan-ignore return.type (PHPStan does not understand we have an array of factories)
+            function(Factory $f) {
                 if ($f instanceof PersistentObjectFactory) {
                     return $f->withPersistMode($this->persistMode);
                 }

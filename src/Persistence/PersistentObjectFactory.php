@@ -204,7 +204,7 @@ abstract class PersistentObjectFactory extends ObjectFactory
 
         $this->throwIfCannotCreateObject();
 
-        if ($this->persistMode() !== PersistMode::PERSIST) {
+        if (PersistMode::PERSIST !== $this->persistMode()) {
             return $object;
         }
 
@@ -265,6 +265,20 @@ abstract class PersistentObjectFactory extends ObjectFactory
         $clone->afterPersist[] = $callback;
 
         return $clone;
+    }
+
+    /**
+     * @internal
+     */
+    public function persistMode(): PersistMode
+    {
+        $config = Configuration::instance();
+
+        if (!$config->isPersistenceEnabled()) {
+            return PersistMode::WITHOUT_PERSISTING;
+        }
+
+        return $this->persist ?? ($config->persistence()->autoPersist(static::class()) ? PersistMode::PERSIST : PersistMode::WITHOUT_PERSISTING);
     }
 
     protected function normalizeParameter(string $field, mixed $value): mixed
@@ -373,20 +387,6 @@ abstract class PersistentObjectFactory extends ObjectFactory
         }
 
         return $this->persistMode()->isPersisting();
-    }
-
-    /**
-     * @internal
-     */
-    public function persistMode(): PersistMode
-    {
-        $config = Configuration::instance();
-
-        if (!$config->isPersistenceEnabled()) {
-            return PersistMode::WITHOUT_PERSISTING;
-        }
-
-        return $this->persist ?? ($config->persistence()->autoPersist(static::class()) ? PersistMode::PERSIST : PersistMode::WITHOUT_PERSISTING);
     }
 
     /**

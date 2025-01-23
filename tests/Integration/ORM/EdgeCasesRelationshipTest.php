@@ -141,7 +141,7 @@ final class EdgeCasesRelationshipTest extends KernelTestCase
         $inverseSide = $inverseSideFactory->create([
             'owningSide' => $owningSideFactory->with([
                 'items' => $itemFactory->many(2),
-            ])
+            ]),
         ]);
 
         $owningSideFactory::assert()->count(1);
