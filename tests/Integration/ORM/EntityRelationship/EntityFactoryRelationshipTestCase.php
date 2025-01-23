@@ -31,7 +31,6 @@ use Zenstruck\Foundry\Tests\Fixture\Entity\Category;
 use Zenstruck\Foundry\Tests\Fixture\Entity\Contact;
 use Zenstruck\Foundry\Tests\Fixture\Entity\Tag;
 
-use function Zenstruck\Foundry\Persistence\refresh;
 use function Zenstruck\Foundry\Persistence\unproxy;
 
 /**
@@ -384,21 +383,6 @@ abstract class EntityFactoryRelationshipTestCase extends KernelTestCase
         );
     }
 
-    private function it_can_add_entity_to_many_to_one(Category $category): void
-    {
-        self::assertCount(0, $category->getContacts());
-
-        $contact1 = static::contactFactory()->create(['category' => $category]);
-        $contact2 = static::contactFactory()->create(['category' => $category]);
-
-        static::categoryFactory()::assert()->count(1);
-
-        self::assertCount(2, $category->getContacts());
-
-        self::assertSame(unproxy($category), $contact1->getCategory());
-        self::assertSame(unproxy($category), $contact2->getCategory());
-    }
-
     /** @return PersistentObjectFactory<Contact> */
     protected static function contactFactoryWithoutCategory(): PersistentObjectFactory
     {
@@ -416,6 +400,21 @@ abstract class EntityFactoryRelationshipTestCase extends KernelTestCase
 
     /** @return PersistentObjectFactory<Address> */
     abstract protected static function addressFactory(): PersistentObjectFactory;
+
+    private function it_can_add_entity_to_many_to_one(Category $category): void
+    {
+        self::assertCount(0, $category->getContacts());
+
+        $contact1 = static::contactFactory()->create(['category' => $category]);
+        $contact2 = static::contactFactory()->create(['category' => $category]);
+
+        static::categoryFactory()::assert()->count(1);
+
+        self::assertCount(2, $category->getContacts());
+
+        self::assertSame(unproxy($category), $contact1->getCategory());
+        self::assertSame(unproxy($category), $contact2->getCategory());
+    }
 
     /**
      * @param FactoryCollection<Contact, PersistentObjectFactory<Contact>>|list<Factory<Contact>>|list<Contact> $contacts
