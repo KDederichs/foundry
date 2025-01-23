@@ -50,6 +50,26 @@ abstract class FoundryTestKernel extends Kernel
         }
     }
 
+    public static function hasORM(): bool
+    {
+        return (bool) \getenv('DATABASE_URL');
+    }
+
+    public static function hasMongo(): bool
+    {
+        return (bool) \getenv('MONGO_URL');
+    }
+
+    public static function usesMigrations(): bool
+    {
+        return 'migrate' === \getenv('DATABASE_RESET_MODE');
+    }
+
+    public static function usesDamaDoctrineTestBundle(): bool
+    {
+        return (bool) \getenv('USE_DAMA_DOCTRINE_TEST_BUNDLE');
+    }
+
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
     {
         $c->loadFromExtension('framework', [
@@ -138,25 +158,5 @@ abstract class FoundryTestKernel extends Kernel
         }
 
         $c->register('logger', NullLogger::class);
-    }
-
-    public static function hasORM(): bool
-    {
-        return (bool)\getenv('DATABASE_URL');
-    }
-
-    public static function hasMongo(): bool
-    {
-        return (bool)\getenv('MONGO_URL');
-    }
-
-    public static function usesMigrations(): bool
-    {
-        return \getenv('DATABASE_RESET_MODE') === 'migrate';
-    }
-
-    public static function usesDamaDoctrineTestBundle(): bool
-    {
-        return (bool)\getenv('USE_DAMA_DOCTRINE_TEST_BUNDLE');
     }
 }

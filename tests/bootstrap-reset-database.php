@@ -26,7 +26,7 @@ $fs->remove(__DIR__.'/../var');
 (new Dotenv())->usePutenv()->loadEnv(__DIR__.'/../.env');
 
 if (FoundryTestKernel::usesMigrations()) {
-    $fs->mkdir(__DIR__ . '/../var/Migrations');
+    $fs->mkdir(__DIR__.'/../var/Migrations');
 
     $kernel = new ResetDatabaseTestKernel('test', true);
     $kernel->boot();
@@ -38,7 +38,7 @@ if (FoundryTestKernel::usesMigrations()) {
 
     $configuration = '';
     if (\getenv('MIGRATION_CONFIGURATION_FILE')) {
-        $configuration = '--configuration ' . \getcwd() . '/' . \getenv('MIGRATION_CONFIGURATION_FILE');
+        $configuration = '--configuration '.\getcwd().'/'.\getenv('MIGRATION_CONFIGURATION_FILE');
     }
     runCommand($application, "doctrine:migrations:diff {$configuration}");
     runCommand($application, 'doctrine:database:drop --force', canFail: true);

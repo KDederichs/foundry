@@ -43,8 +43,7 @@ final class ResetDatabaseTestKernel extends FoundryTestKernel
                 GlobalInvokableService::class,
             ],
             'orm' => [
-                'reset' =>
-                    FoundryTestKernel::usesMigrations()
+                'reset' => FoundryTestKernel::usesMigrations()
                         ? [
                             'mode' => ResetDatabaseMode::MIGRATE,
                             'migrations' => [
@@ -59,7 +58,7 @@ final class ResetDatabaseTestKernel extends FoundryTestKernel
             // if no configuration file was given in Foundry's config, let's use the main one as default.
             $c->loadFromExtension(
                 'doctrine_migrations',
-                include __DIR__ . '/migration-configs/migration-configuration.php'
+                include __DIR__.'/migration-configs/migration-configuration.php'
             );
         }
 
