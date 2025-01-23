@@ -261,7 +261,7 @@ final class ZenstruckFoundryBundle extends AbstractBundle implements CompilerPas
                     }
                 );
 
-            if ($resetMode === ResetDatabaseMode::MIGRATE) {
+            if (ResetDatabaseMode::MIGRATE === $resetMode) {
                 $container->getDefinition(OrmResetter::class)
                     ->replaceArgument('$configurations', $config['orm']['reset']['migrations']['configurations'])
                 ;

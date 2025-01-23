@@ -16,13 +16,13 @@ namespace Zenstruck\Foundry\Tests\Integration\ResetDatabase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Zenstruck\Foundry\Tests\Fixture\EntityInAnotherSchema\Article;
 use Zenstruck\Foundry\Persistence\PersistenceManager;
+use Zenstruck\Foundry\Tests\Fixture\EntityInAnotherSchema\Article;
 use Zenstruck\Foundry\Tests\Fixture\Factories\Document\GenericDocumentFactory;
-use Zenstruck\Foundry\Tests\Fixture\ResetDatabase\MongoResetterDecorator;
-use Zenstruck\Foundry\Tests\Fixture\ResetDatabase\OrmResetterDecorator;
 use Zenstruck\Foundry\Tests\Fixture\Factories\Entity\GenericEntityFactory;
 use Zenstruck\Foundry\Tests\Fixture\FoundryTestKernel;
+use Zenstruck\Foundry\Tests\Fixture\ResetDatabase\MongoResetterDecorator;
+use Zenstruck\Foundry\Tests\Fixture\ResetDatabase\OrmResetterDecorator;
 
 use function Zenstruck\Foundry\Persistence\persist;
 use function Zenstruck\Foundry\Persistence\repository;
