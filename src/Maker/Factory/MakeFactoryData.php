@@ -15,6 +15,8 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Zenstruck\Foundry\ObjectFactory;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
@@ -35,6 +37,7 @@ final class MakeFactoryData
     private array $defaultProperties = [];
     /** @var list<MakeFactoryPHPDocMethod> */
     private array $methodsInPHPDoc;
+    private PropertyInfoExtractor $propertyInfo;
 
     public function __construct(
         private \ReflectionClass $object,
@@ -62,6 +65,14 @@ final class MakeFactoryData
         }
 
         $this->methodsInPHPDoc = $withPhpDoc ? MakeFactoryPHPDocMethod::createAll($this) : [];
+        $reflectionExtractor = new ReflectionExtractor();
+        $this->propertyInfo = new PropertyInfoExtractor(
+            [],
+            [],
+            [],
+            [$reflectionExtractor],
+            [$reflectionExtractor]
+        );
     }
 
     // @phpstan-ignore-next-line
@@ -154,6 +165,15 @@ final class MakeFactoryData
     public function getDefaultProperties(): array
     {
         $defaultProperties = $this->defaultProperties;
+        $clazz = $this->object->getName();
+
+        foreach ($defaultProperties as $propertyName => $propertyDefault) {
+            if ($this->propertyInfo->isWritable($clazz, $propertyName) || $this->propertyInfo->isInitializable($clazz, $propertyName)) {
+                continue;
+            }
+            unset($defaultProperties[$propertyName]);
+        }
+
         \ksort($defaultProperties);
 
         return $defaultProperties;

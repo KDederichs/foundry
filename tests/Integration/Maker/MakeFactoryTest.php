@@ -23,6 +23,7 @@ use Zenstruck\Foundry\Tests\Fixture\Entity\GenericEntity;
 use Zenstruck\Foundry\Tests\Fixture\Entity\WithEmbeddableEntity;
 use Zenstruck\Foundry\Tests\Fixture\Object1;
 use Zenstruck\Foundry\Tests\Fixture\ObjectWithEnum;
+use Zenstruck\Foundry\Tests\Fixture\ObjectWithNonWriteable;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -419,6 +420,18 @@ final class MakeFactoryTest extends MakerTestCase
         $tester->execute(['class' => ObjectWithEnum::class, '--no-persistence' => true]);
 
         $this->assertFileFromMakerSameAsExpectedFile(self::tempFile('src/Factory/ObjectWithEnumFactory.php'));
+    }
+
+    /**
+     * @test
+     */
+    public function does_not_initialize_non_settable(): void
+    {
+        $tester = $this->makeFactoryCommandTester();
+
+        $tester->execute(['class' => ObjectWithNonWriteable::class, '--no-persistence' => true]);
+
+        $this->assertFileFromMakerSameAsExpectedFile(self::tempFile('src/Factory/ObjectWithNonWriteableFactory.php'));
     }
 
     private function emulateSCAToolEnabled(string $scaToolFilePath): void
