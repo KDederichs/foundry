@@ -16,8 +16,6 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface;
-use Symfony\Component\PropertyInfo\PropertyInitializableExtractorInterface;
 use Zenstruck\Foundry\ObjectFactory;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
@@ -32,10 +30,7 @@ final class MakeFactoryData
     public const STATIC_ANALYSIS_TOOL_PHPSTAN = 'phpstan';
     public const STATIC_ANALYSIS_TOOL_PSALM = 'psalm';
 
-    /**
-     * @var null|PropertyAccessExtractorInterface&PropertyInitializableExtractorInterface
-     */
-    private static mixed $propertyInfo = null;
+    private static ReflectionExtractor|null $propertyInfo = null;
 
     /** @var list<string> */
     private array $uses;
@@ -53,6 +48,7 @@ final class MakeFactoryData
         private string $staticAnalysisTool,
         private bool $persisted,
         bool $withPhpDoc,
+        /** @var string[]|true $forceProperties */
         array|bool $forceProperties
     ) {
         $this->uses = [
@@ -216,7 +212,7 @@ final class MakeFactoryData
         );
     }
 
-    private static function propertyInfo(): PropertyAccessExtractorInterface&PropertyInitializableExtractorInterface
+    private static function propertyInfo(): ReflectionExtractor
     {
         return self::$propertyInfo ??= new ReflectionExtractor();
     }
