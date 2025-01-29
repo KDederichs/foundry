@@ -341,6 +341,9 @@ final class ZenstruckFoundryBundle extends AbstractBundle implements CompilerPas
             $container->getDefinition('.zenstruck_foundry.instantiator')
                 ->addMethodCall('alwaysForce', returnsClone: true)
             ;
+            $container->getDefinition('.zenstruck_foundry.maker.factory.generator')
+                ->addMethodCall('alwaysForce', returnsClone: true)
+            ;
         }
     }
 

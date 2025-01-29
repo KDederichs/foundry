@@ -32,6 +32,9 @@ final class FactoryGenerator
     public const PHPSTAN_PATH = '/vendor/phpstan/phpstan/phpstan';
     public const PSALM_PATH = '/vendor/vimeo/psalm/psalm';
 
+    /** @var string[]|true */
+    private array|bool $forceProperties = [];
+
     /** @param \Traversable<int, DefaultPropertiesGuesser> $defaultPropertiesGuessers */
     public function __construct(
         private ?PersistenceManager $persistenceManager,
@@ -150,6 +153,7 @@ final class FactoryGenerator
             $this->staticAnalysisTool(),
             $persisted ?? false,
             $makeFactoryQuery->addPhpDoc(),
+            $this->forceProperties
         );
     }
 
@@ -160,5 +164,13 @@ final class FactoryGenerator
             \file_exists($this->kernel->getProjectDir().self::PSALM_PATH) => MakeFactoryData::STATIC_ANALYSIS_TOOL_PSALM,
             default => MakeFactoryData::STATIC_ANALYSIS_TOOL_NONE,
         };
+    }
+
+    public function alwaysForce(string ...$properties): self
+    {
+        $clone = clone $this;
+        $clone->forceProperties = $properties ?: true;
+
+        return $clone;
     }
 }

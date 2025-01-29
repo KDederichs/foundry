@@ -434,6 +434,18 @@ final class MakeFactoryTest extends MakerTestCase
         $this->assertFileFromMakerSameAsExpectedFile(self::tempFile('src/Factory/ObjectWithNonWriteableFactory.php'));
     }
 
+    /**
+     * @test
+     */
+    public function does_force_initialization_of_non_settable_with_always_force(): void
+    {
+        $tester = $this->makeFactoryCommandTester();
+
+        $tester->execute(['class' => ObjectWithNonWriteable::class, '--no-persistence' => true]);
+
+        $this->assertFileFromMakerSameAsExpectedFile(self::tempFile('src/Factory/ObjectWithNonWriteableFactory.php'));
+    }
+
     private function emulateSCAToolEnabled(string $scaToolFilePath): void
     {
         \mkdir(\dirname($scaToolFilePath), 0777, true);

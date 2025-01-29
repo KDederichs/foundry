@@ -16,7 +16,8 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface;
+use Symfony\Component\PropertyInfo\PropertyInitializableExtractorInterface;
 use Zenstruck\Foundry\ObjectFactory;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
@@ -31,13 +32,19 @@ final class MakeFactoryData
     public const STATIC_ANALYSIS_TOOL_PHPSTAN = 'phpstan';
     public const STATIC_ANALYSIS_TOOL_PSALM = 'psalm';
 
+    /**
+     * @var null|PropertyAccessExtractorInterface&PropertyInitializableExtractorInterface
+     */
+    private static mixed $propertyInfo = null;
+
     /** @var list<string> */
     private array $uses;
     /** @var array<string, string> */
     private array $defaultProperties = [];
     /** @var list<MakeFactoryPHPDocMethod> */
     private array $methodsInPHPDoc;
-    private PropertyInfoExtractor $propertyInfo;
+    /** @var string[]|true */
+    private array|bool $forceProperties;
 
     public function __construct(
         private \ReflectionClass $object,
@@ -46,6 +53,7 @@ final class MakeFactoryData
         private string $staticAnalysisTool,
         private bool $persisted,
         bool $withPhpDoc,
+        array|bool $forceProperties
     ) {
         $this->uses = [
             $this->getFactoryClass(),
@@ -65,14 +73,7 @@ final class MakeFactoryData
         }
 
         $this->methodsInPHPDoc = $withPhpDoc ? MakeFactoryPHPDocMethod::createAll($this) : [];
-        $reflectionExtractor = new ReflectionExtractor();
-        $this->propertyInfo = new PropertyInfoExtractor(
-            [],
-            [],
-            [],
-            [$reflectionExtractor],
-            [$reflectionExtractor]
-        );
+        $this->forceProperties = $forceProperties;
     }
 
     // @phpstan-ignore-next-line
@@ -167,12 +168,17 @@ final class MakeFactoryData
         $defaultProperties = $this->defaultProperties;
         $clazz = $this->object->getName();
 
-        foreach ($defaultProperties as $propertyName => $propertyDefault) {
-            if ($this->propertyInfo->isWritable($clazz, $propertyName) || $this->propertyInfo->isInitializable($clazz, $propertyName)) {
-                continue;
+        $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($clazz): bool {
+            if (true === $this->forceProperties) {
+                return true;
             }
-            unset($defaultProperties[$propertyName]);
-        }
+
+            if (is_array($this->forceProperties) && \in_array($propertyName, $this->forceProperties, true)) {
+                return true;
+            }
+
+            return self::propertyInfo()->isWritable($clazz, $propertyName) || self::propertyInfo()->isInitializable($clazz, $propertyName);
+        }, ARRAY_FILTER_USE_KEY);
 
         \ksort($defaultProperties);
 
@@ -208,5 +214,10 @@ final class MakeFactoryData
             $propertyName,
             "self::faker()->randomElement({$enumShortClassName}::cases()),",
         );
+    }
+
+    private static function propertyInfo(): PropertyAccessExtractorInterface&PropertyInitializableExtractorInterface
+    {
+        return self::$propertyInfo ??= new ReflectionExtractor();
     }
 }
