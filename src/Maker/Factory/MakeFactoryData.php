@@ -158,7 +158,7 @@ final class MakeFactoryData
     public function getDefaultProperties(): array
     {
         $defaultProperties = $this->defaultProperties;
-        $clazz = $this->object->getName();
+        $class = $this->object->getName();
 
         /**
          * If forceProperties is not set we filter out properties that can not be set because they're either readonly or have no setter.
@@ -166,12 +166,12 @@ final class MakeFactoryData
          *
          * We do this here because we need to get the class of the Entity which only seems to be accessible here.
          */
-        $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($clazz): bool {
+        $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($class): bool {
             if (true === $this->forceProperties) {
                 return true;
             }
 
-            return self::propertyInfo()->isWritable($clazz, $propertyName) || self::propertyInfo()->isInitializable($clazz, $propertyName);
+            return self::propertyInfo()->isWritable($class, $propertyName) || self::propertyInfo()->isInitializable($class, $propertyName);
         }, ARRAY_FILTER_USE_KEY);
 
         \ksort($defaultProperties);
