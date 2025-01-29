@@ -35,6 +35,10 @@ final class TestKernel extends FoundryTestKernel
     {
         parent::configureContainer($c, $loader);
 
+        if ($this->getEnvironment() !== 'test') {
+            $loader->load(\sprintf('%s/config/%s.yaml', __DIR__, $this->getEnvironment()));
+        }
+
         $c->loadFromExtension('zenstruck_foundry', [
             'orm' => [
                 'reset' => [

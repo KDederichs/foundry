@@ -38,8 +38,6 @@ final class MakeFactoryData
     private array $defaultProperties = [];
     /** @var list<MakeFactoryPHPDocMethod> */
     private array $methodsInPHPDoc;
-    /** @var string[]|true */
-    private array|bool $forceProperties;
 
     public function __construct(
         private \ReflectionClass $object,
@@ -48,8 +46,7 @@ final class MakeFactoryData
         private string $staticAnalysisTool,
         private bool $persisted,
         bool $withPhpDoc,
-        /** @var string[]|true $forceProperties */
-        array|bool $forceProperties
+        private bool $forceProperties
     ) {
         $this->uses = [
             $this->getFactoryClass(),
@@ -69,7 +66,6 @@ final class MakeFactoryData
         }
 
         $this->methodsInPHPDoc = $withPhpDoc ? MakeFactoryPHPDocMethod::createAll($this) : [];
-        $this->forceProperties = $forceProperties;
     }
 
     // @phpstan-ignore-next-line
@@ -164,12 +160,14 @@ final class MakeFactoryData
         $defaultProperties = $this->defaultProperties;
         $clazz = $this->object->getName();
 
+        /**
+         * If forceProperties is not set we filter out properties that can not be set because they're either readonly or have no setter.
+         * Useful for properties that auto generate when the entity is created and can not be changed like a createdAt property for example.
+         *
+         * We do this here because we need to get the class of the Entity which only seems to be accessible here.
+         */
         $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($clazz): bool {
             if (true === $this->forceProperties) {
-                return true;
-            }
-
-            if (is_array($this->forceProperties) && \in_array($propertyName, $this->forceProperties, true)) {
                 return true;
             }
 

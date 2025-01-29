@@ -439,7 +439,7 @@ final class MakeFactoryTest extends MakerTestCase
      */
     public function does_force_initialization_of_non_settable_with_always_force(): void
     {
-        $tester = $this->makeFactoryCommandTester();
+        $tester = $this->makeFactoryCommandTester('always_force');
 
         $tester->execute(['class' => ObjectWithNonWriteable::class, '--no-persistence' => true]);
 
@@ -452,8 +452,10 @@ final class MakeFactoryTest extends MakerTestCase
         \touch($scaToolFilePath);
     }
 
-    private function makeFactoryCommandTester(): CommandTester
+    private function makeFactoryCommandTester(string $appEnv = 'test'): CommandTester
     {
-        return new CommandTester((new Application(self::bootKernel()))->find('make:factory'));
+        return new CommandTester((new Application(self::bootKernel([
+            'environment' => $appEnv,
+        ])))->find('make:factory'));
     }
 }

@@ -41,8 +41,8 @@ final class ObjectWithNonWriteableFactory extends ObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'baz' => self::faker()->sentence(),
             'bar' => self::faker()->sentence(),
+            'baz' => self::faker()->sentence(),
             'foo' => self::faker()->sentence(),
         ];
     }
