@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## [v2.3.2](https://github.com/zenstruck/foundry/releases/tag/v2.3.2)
+
+February 1st, 2025 - [v2.3.1...v2.3.2](https://github.com/zenstruck/foundry/compare/v2.3.1...v2.3.2)
+
+* 46464cc chore(ci): misc improvments in CI permutations (#797) by @nikophil
+* 86c5aab test: assert updates are implicitly persisted (#781) by @nikophil
+* 54c7424 feat: deprecate when Factories trait is not used in a KernelTestCase (#766) by @nikophil
+* 9937b11 chore: add issue template (#795) by @nikophil
+* 884113f fix: simplify reset database extension (#779) by @nikophil
+* bd50f41 fix: add unpersisted object to relation (#780) by @nikophil
+* 17388bc tests: transform "migrate" testsuite into "reset database" testsuite (#763) by @nikophil
+* e45913e fix: propagate "schedule for insert" to factory collection (#775) by @nikophil
+* d9262cc fix: fix .gitattributes and `#[RequiresPhpUnit]` versions (#792) by @nikophil
+* 57c42bc tests: fix a test after a bug was resolved in doctrine migrations (#791) by @nikophil
+* 200cfdd [Doc] Fix misc issues (#789) by @javiereguiluz
+* 553807b minor: add platform config to mysql docker container (#788) by @kbond
+* 316d3c7 doc: fix typo (#782) by @norival
+* 0d66c02 minor: use refresh for detached entities (#778) by @nikophil
+* 29b48a1 test: add orphan removal premutation (#777) by @nikophil
+* c00b3f1 fix: isPersisted must work when id is known in advance (#774) by @nikophil
+* f303f3f fix: remove _refresh call from create object process (#773) by @nikophil
+* 65cedbf fix: use a "placeholder" for inversed one-to-one (#755) by @nikophil
+* 5f99506 minor: introduce PerssitenceManager::isPersisted() (#754) by @nikophil
+* 9948d6a fix(ci): change PHP version used by PHP CS-Fixer  (#768) by @nikophil
+* cf3cc8b docs: Minor syntax fix (#767) by @javiereguiluz
+* e8f9a92 docs: clarify default attributes and fixed some syntax issues (#765) by @nikophil, @javiereguiluz
+* 1db5ced tests: validate PSR-4 in CI (#762) by @nikophil
+* cafc693 [Docs fix] Just spelling in docs (#761) by @GrinWay
+* d192c4a [Docs fix] Proxy::_save() instead of Proxy::save() (#760) by @GrinWay
+* ff7210a [Docs fix] Factory::_real() instead Factory::object() (#759) by @GrinWay
+* d1240b1 fix: RequiresPhpunit should use semver constraint by @nikophil
+* fd2e38c chore: upgrade to phpstan 2 (#748) by @nikophil
+* 23b4ec4 tests: automatically create cascade persist permutations (#666) by @nikophil
+* f4ba5d8 tests: add CI permutation with windows (#747) by @nikophil
+* c17ef91 fix: define FactoryCollection type more precisely (#744) by @nikophil
+* 98f018c feat: schedule objects for insert right after instantiation (#742) by @nikophil
+* 2dcad10 feat: provide current factory to hook (#738) by @nikophil
+* ea89504 fix: pass to `afterPersist` hook the attributes from `beforeInstantiate` (#745) by @nikophil, @kbond
+
 ## [v2.3.1](https://github.com/zenstruck/foundry/releases/tag/v2.3.1)
 
 December 12th, 2024 - [v2.3.0...v2.3.1](https://github.com/zenstruck/foundry/compare/v2.3.0...v2.3.1)
