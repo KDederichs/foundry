@@ -231,6 +231,9 @@ final class ZenstruckFoundryBundle extends AbstractBundle implements CompilerPas
             if (!isset($bundles['DoctrineBundle']) && !isset($bundles['DoctrineMongoDBBundle'])) {
                 $container->removeDefinition('.zenstruck_foundry.maker.factory.doctrine_scalar_fields_default_properties_guesser');
             }
+
+            $container->getDefinition('.zenstruck_foundry.maker.factory.generator')
+                ->setArgument('$forceProperties', $config['instantiator']['always_force_properties'] ?? false);
         } else {
             $configurator->import('../config/command_stubs.php');
         }

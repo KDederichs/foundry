@@ -1,0 +1,3 @@
+zenstruck_foundry:
+    instantiator:
+        always_force_properties: true # always "force set" properties

@@ -39,6 +39,7 @@ final class FactoryGenerator
         private \Traversable $defaultPropertiesGuessers,
         private FactoryClassMap $factoryClassMap,
         private NamespaceGuesser $namespaceGuesser,
+        private bool $forceProperties = false
     ) {
     }
 
@@ -150,6 +151,7 @@ final class FactoryGenerator
             $this->staticAnalysisTool(),
             $persisted ?? false,
             $makeFactoryQuery->addPhpDoc(),
+            $this->forceProperties
         );
     }
 

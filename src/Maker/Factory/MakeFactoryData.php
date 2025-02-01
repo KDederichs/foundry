@@ -15,6 +15,7 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Zenstruck\Foundry\ObjectFactory;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
@@ -28,6 +29,8 @@ final class MakeFactoryData
     public const STATIC_ANALYSIS_TOOL_NONE = 'none';
     public const STATIC_ANALYSIS_TOOL_PHPSTAN = 'phpstan';
     public const STATIC_ANALYSIS_TOOL_PSALM = 'psalm';
+
+    private static ReflectionExtractor|null $propertyInfo = null;
 
     /** @var list<string> */
     private array $uses;
@@ -43,6 +46,7 @@ final class MakeFactoryData
         private string $staticAnalysisTool,
         private bool $persisted,
         bool $withPhpDoc,
+        private bool $forceProperties
     ) {
         $this->uses = [
             $this->getFactoryClass(),
@@ -154,6 +158,22 @@ final class MakeFactoryData
     public function getDefaultProperties(): array
     {
         $defaultProperties = $this->defaultProperties;
+        $class = $this->object->getName();
+
+        /**
+         * If forceProperties is not set we filter out properties that can not be set because they're either readonly or have no setter.
+         * Useful for properties that auto generate when the entity is created and can not be changed like a createdAt property for example.
+         *
+         * We do this here because we need to get the class of the Entity which only seems to be accessible here.
+         */
+        $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($class): bool {
+            if (true === $this->forceProperties) {
+                return true;
+            }
+
+            return self::propertyInfo()->isWritable($class, $propertyName) || self::propertyInfo()->isInitializable($class, $propertyName);
+        }, ARRAY_FILTER_USE_KEY);
+
         \ksort($defaultProperties);
 
         return $defaultProperties;
@@ -188,5 +208,10 @@ final class MakeFactoryData
             $propertyName,
             "self::faker()->randomElement({$enumShortClassName}::cases()),",
         );
+    }
+
+    private static function propertyInfo(): ReflectionExtractor
+    {
+        return self::$propertyInfo ??= new ReflectionExtractor();
     }
 }
