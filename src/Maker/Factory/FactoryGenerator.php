@@ -39,7 +39,7 @@ final class FactoryGenerator
         private \Traversable $defaultPropertiesGuessers,
         private FactoryClassMap $factoryClassMap,
         private NamespaceGuesser $namespaceGuesser,
-        private bool $forceProperties = false
+        private bool $forceProperties = false,
     ) {
     }
 

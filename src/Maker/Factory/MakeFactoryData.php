@@ -30,7 +30,7 @@ final class MakeFactoryData
     public const STATIC_ANALYSIS_TOOL_PHPSTAN = 'phpstan';
     public const STATIC_ANALYSIS_TOOL_PSALM = 'psalm';
 
-    private static ReflectionExtractor|null $propertyInfo = null;
+    private static ?ReflectionExtractor $propertyInfo = null;
 
     /** @var list<string> */
     private array $uses;
@@ -46,7 +46,7 @@ final class MakeFactoryData
         private string $staticAnalysisTool,
         private bool $persisted,
         bool $withPhpDoc,
-        private bool $forceProperties
+        private bool $forceProperties,
     ) {
         $this->uses = [
             $this->getFactoryClass(),
@@ -166,13 +166,13 @@ final class MakeFactoryData
          *
          * We do this here because we need to get the class of the Entity which only seems to be accessible here.
          */
-        $defaultProperties = array_filter($defaultProperties, function (string $propertyName) use ($class): bool {
+        $defaultProperties = \array_filter($defaultProperties, function(string $propertyName) use ($class): bool {
             if (true === $this->forceProperties) {
                 return true;
             }
 
             return self::propertyInfo()->isWritable($class, $propertyName) || self::propertyInfo()->isInitializable($class, $propertyName);
-        }, ARRAY_FILTER_USE_KEY);
+        }, \ARRAY_FILTER_USE_KEY);
 
         \ksort($defaultProperties);
 

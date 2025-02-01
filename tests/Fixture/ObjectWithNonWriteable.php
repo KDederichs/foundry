@@ -18,7 +18,7 @@ final class ObjectWithNonWriteable
     private string $baz;
 
     public function __construct(
-        public readonly string $foo
+        public readonly string $foo,
     ) {
         $this->bar = 'bar';
     }
@@ -28,9 +28,10 @@ final class ObjectWithNonWriteable
         return $this->baz;
     }
 
-    public function setBaz(string $baz): ObjectWithNonWriteable
+    public function setBaz(string $baz): self
     {
         $this->baz = $baz;
+
         return $this;
     }
 

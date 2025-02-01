@@ -35,7 +35,7 @@ final class TestKernel extends FoundryTestKernel
     {
         parent::configureContainer($c, $loader);
 
-        if ($this->getEnvironment() !== 'test') {
+        if ('test' !== $this->getEnvironment()) {
             $loader->load(\sprintf('%s/config/%s.yaml', __DIR__, $this->getEnvironment()));
         }
 
