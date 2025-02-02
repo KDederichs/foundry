@@ -423,7 +423,7 @@ abstract class PersistentObjectFactory extends ObjectFactory
 
         if (!Configuration::instance()->hasEventDispatcher()) {
             return $factory;
-        };
+        }
 
         // Dispatch event after persist
         return $factory->afterPersist(
