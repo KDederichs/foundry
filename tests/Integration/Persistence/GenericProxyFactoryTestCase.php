@@ -20,6 +20,7 @@ use Zenstruck\Foundry\Tests\Fixture\Entity\EdgeCases\EntityWithReadonly\EntityWi
 use Zenstruck\Foundry\Tests\Fixture\Model\Embeddable;
 use Zenstruck\Foundry\Tests\Fixture\Model\GenericModel;
 
+use Zenstruck\Foundry\Tests\Fixture\Model\GenericModelCollectionItem;
 use function Zenstruck\Foundry\factory;
 
 /**
@@ -291,16 +292,19 @@ abstract class GenericProxyFactoryTestCase extends GenericFactoryTestCase
 
         $this->assertSame($object->_real(), $object->_real());
 
-        $object->_real()->addElementToCollection('foo');
-        $object->_real()->addElementToCollection('bar');
+        $ci1 = new GenericModelCollectionItem('foo');
+        $ci2 = new GenericModelCollectionItem('bar');
+
+        $object->_real()->addElementToCollection($ci1);
+        $object->_real()->addElementToCollection($ci2);
 
         $object->_real()->addElementToOtherCollection('foo2');
         $object->_real()->addElementToOtherCollection('bar2');
 
         $object->_save();
 
-        $this->assertSame(['foo', 'bar'], $object->getCollection());
-        $this->assertSame(['foo', 'bar'], $object->_real()->getCollection());
+        $this->assertSame(2, $object->getCollection()->count());
+        $this->assertSame(2, $object->_real()->getCollection()->count());
 
         $this->assertSame(['foo2', 'bar2'], $object->getOtherCollection());
         $this->assertSame(['foo2', 'bar2'], $object->_real()->getOtherCollection());
