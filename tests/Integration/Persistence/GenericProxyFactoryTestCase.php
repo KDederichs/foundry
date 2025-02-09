@@ -285,6 +285,32 @@ abstract class GenericProxyFactoryTestCase extends GenericFactoryTestCase
     /**
      * @test
      */
+    public function real_method_always_return_same_instance(): void
+    {
+        $object = static::factory()->create();
+
+        $this->assertSame($object->_real(), $object->_real());
+
+        $object->_real()->addElementToCollection('foo');
+        $object->_real()->addElementToCollection('bar');
+
+        $object->_real()->addElementToOtherCollection('foo2');
+        $object->_real()->addElementToOtherCollection('bar2');
+
+        $object->_save();
+
+        $this->assertSame(['foo', 'bar'], $object->getCollection());
+        $this->assertSame(['foo', 'bar'], $object->_real()->getCollection());
+
+        $this->assertSame(['foo2', 'bar2'], $object->getOtherCollection());
+        $this->assertSame(['foo2', 'bar2'], $object->_real()->getOtherCollection());
+
+        $this->assertSame($object->_real(), $object->_real());
+    }
+
+    /**
+     * @test
+     */
     public function can_use_after_persist_with_attributes_added_in_before_instantiate(): void
     {
         $value = 'value set with before instantiate';

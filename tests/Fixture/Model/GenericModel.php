@@ -37,6 +37,16 @@ abstract class GenericModel
     #[MongoDB\Field(type: 'date_immutable', nullable: true)]
     private ?\DateTimeImmutable $date = null;
 
+    /** @var list<string> */
+    #[ORM\Column()]
+    #[MongoDB\Field()]
+    private array $collection = [];
+
+    /** @var list<string> */
+    #[ORM\Column()]
+    #[MongoDB\Field()]
+    private array $otherCollection = [];
+
     public function __construct(string $prop1)
     {
         $this->prop1 = $prop1;
@@ -60,5 +70,25 @@ abstract class GenericModel
     public function setDate(?\DateTimeImmutable $date): void
     {
         $this->date = $date;
+    }
+
+    public function getCollection(): array
+    {
+        return $this->collection;
+    }
+
+    public function addElementToCollection(string $element): void
+    {
+        $this->collection[] = $element;
+    }
+
+    public function getOtherCollection(): array
+    {
+        return $this->otherCollection;
+    }
+
+    public function addElementToOtherCollection(string $element): void
+    {
+        $this->otherCollection[] = $element;
     }
 }
