@@ -23,7 +23,7 @@ use Zenstruck\Foundry\Tests\Fixture\Model\Base;
 class Category extends Base
 {
     /** @var Collection<int,Contact> */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Contact::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Contact::class, cascade: ['persist'])]
     protected Collection $contacts;
 
     /** @var Collection<int,Contact> */

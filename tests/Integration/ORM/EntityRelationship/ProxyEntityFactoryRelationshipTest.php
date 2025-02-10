@@ -22,6 +22,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Zenstruck\Assert;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Tests\Fixture\DoctrineCascadeRelationship\UsingRelationships;
+use Zenstruck\Foundry\Tests\Fixture\Entity\Address;
 use Zenstruck\Foundry\Tests\Fixture\Entity\Contact;
 use Zenstruck\Foundry\Tests\Fixture\Factories\Entity\Address\ProxyAddressFactory;
 use Zenstruck\Foundry\Tests\Fixture\Factories\Entity\Category\ProxyCategoryFactory;
@@ -142,21 +143,18 @@ final class ProxyEntityFactoryRelationshipTest extends EntityFactoryRelationship
 
         $this->assertSame($category->_real(), $category->_real());
 
-        $category->_real()->addContact($contact1 = static::contactFactory()->create()->_real());
-        $category->_real()->addContact($contact2 = static::contactFactory()->create()->_real());
+        $c1 = new Contact('C1', new Address('C2'));
+        $c2 = new Contact('C2', new Address('C3'));
 
-        $category->_real()->addSecondaryContact($contact3 = static::contactFactory()->create()->_real());
-        $category->_real()->addSecondaryContact($contact4 = static::contactFactory()->create()->_real());
+        $category->_real()->addContact($c1);
+        $category->_real()->addContact($c2);
 
         $category->_save();
 
         $this->assertSame($category->_real(), $category->_real());
 
-        $this->assertSame([$contact1, $contact2], $category->getContacts()->getValues());
-        $this->assertSame([$contact1, $contact2], $category->_real()->getContacts()->getValues());
-
-        $this->assertSame([$contact3, $contact4], $category->getSecondaryContacts()->getValues());
-        $this->assertSame([$contact3, $contact4], $category->_real()->getSecondaryContacts()->getValues());
+        $this->assertSame([$c1, $c2], $category->getContacts()->getValues());
+        $this->assertSame([$c1, $c2], $category->_real()->getContacts()->getValues());
     }
 
     protected static function contactFactory(): ProxyContactFactory

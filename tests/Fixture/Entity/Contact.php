@@ -41,7 +41,7 @@ class Contact extends Base
     #[ORM\JoinTable(name: 'category_tag_standard_secondary')]
     protected Collection $secondaryTags;
 
-    #[ORM\OneToOne(targetEntity: Address::class, inversedBy: 'contact')]
+    #[ORM\OneToOne(targetEntity: Address::class, inversedBy: 'contact', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     protected Address $address;
 
